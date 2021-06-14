@@ -1,4 +1,2 @@
-FROM php:5.6-apache
-RUN docker-php-ext-install pdo pdo_mysql
+FROM nginx:latest
 COPY ./src/ /usr/share/nginx/html/
-

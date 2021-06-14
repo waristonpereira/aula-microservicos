@@ -1,12 +1,14 @@
 version: '3'
 services:
-    frontend:
-        image: frontend
+    backend:
+        image: backend
         build:
-            context: ./frontend
+            context: ./backend
             dockerfile: Dockerfile
         ports:
             - "80:80"
+        links:
+            - db
         deploy:
             replicas: 3
             restart_policy:
@@ -14,6 +16,23 @@ services:
                 max_attempts: 3
         networks:
             - net
+    db:
+        image: mysql:5.7
+        volumes:
+            - db_data:/var/lib/mysql
+            - ./database:/docker-entrypoint-initdb.d
+        environment:
+            - MYSQL_ROOT_PASSWORD=todo-app-pass
+            - MYSQL_DATABASE=todo
+        deploy:
+            replicas: 1
+            restart_policy:
+                condition: on-failure
+                max_attempts: 3
+        networks:
+            - net        
+volumes:
+    db_data:
 networks:
     net:
         external: true     
