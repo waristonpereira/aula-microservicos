@@ -1,0 +1,16 @@
+version: '3'
+services:
+    frontend:
+        build: .
+        ports:
+            - "80:80"
+        deploy:
+            replicas: 3
+            restart_policy:
+                condition: on-failure
+                max_attempts: 3
+        networks:
+            - net
+networks:
+    net:
+        external: true     
